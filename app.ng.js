@@ -4,13 +4,16 @@ Parties = new Mongo.Collection("parties");
 // Everything inside this if statement will
 // only run on the client side.
 if (Meteor.isClient) {
-  angular.module('socially', ['angular-meteor']);
+  var app = angular.module('socially', ['angular-meteor']);
 
-  angular.module('socially').controller('PartiesListCtrl',
+  app.controller('PartiesListCtrl',
     function($scope, $meteor) {
+      // Bind parties to the Parties Mongo collection
       $scope.parties = $meteor.collection(Parties);
+      $scope.test = 'test';
   });
 }
+
 
 if (Meteor.isServer) {
   Meteor.startup(function() {
