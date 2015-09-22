@@ -5,7 +5,12 @@
 # but you can also edit it by hand.
 
 meteor-platform
-autopublish             # Publish all data to the clients (for prototyping)
-insecure                # Allow all DB writes from clients (for prototyping)
 angular
 angularui:angular-ui-router
+accounts-password
+accounts-ui
+urigo:angular-blaze-template
+accounts-facebook
+accounts-twitter
+angularutils:pagination
+tmeasday:publish-counts
