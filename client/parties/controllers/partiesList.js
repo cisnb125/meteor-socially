@@ -1,6 +1,6 @@
 angular.module("socially").controller("PartiesListCtrl",
-  ['$scope', '$meteor', '$rootScope', '$state', '$modal',
-  function($scope, $meteor, $rootScope, $state, $modal){
+  ['$scope', '$meteor', '$rootScope', '$state', '$mdDialog', '$filter',
+  function($scope, $meteor, $rootScope, $state, $mdDialog, $filter){
 
     $scope.page = 1;
     $scope.perPage = 3;
@@ -8,12 +8,23 @@ angular.module("socially").controller("PartiesListCtrl",
     $scope.orderProperty = '1';
 
     $scope.users = $meteor.collection(Meteor.users, false).subscribe('users');
+    $scope.images = $meteor.collectionFS(Images, false, Images).subscribe('images');
 
     $scope.parties = $meteor.collection(function() {
       return Parties.find({}, {
         sort : $scope.getReactively('sort')
       });
     });
+
+    $scope.getMainImage = function(images) {
+      if (images && images.length && images[0] && images[0].id) {
+        var url = $filter('filter')($scope.images, {_id: images[0].id})[0].url();
+
+        return {
+          'background-image': 'url("' + url + '")'
+        }
+      }
+    };
 
     $meteor.autorun($scope, function() {
       $meteor.subscribe('parties', {
@@ -90,7 +101,7 @@ angular.module("socially").controller("PartiesListCtrl",
             longitude: -73
           },
           options: {
-            styles: style2,
+            styles: styles2,
             maxZoon: 10
           },
           zoom: 8
@@ -153,21 +164,22 @@ angular.module("socially").controller("PartiesListCtrl",
       return owner;
     };
 
-    $scope.openAddNewPartyModal = function () {
-      var modalInstance = $modal.open({
-        animation: true,
-        templateUrl: 'client/parties/views/add-new-party-modal.ng.html',
+    $scope.openAddNewPartyModal = function(){
+      $mdDialog.show({
         controller: 'AddNewPartyCtrl',
+        templateUrl: 'client/parties/views/add-new-party-modal.ng.html',
+        clickOutsideToClose:true,
         resolve: {
           parties: function () {
             return $scope.parties;
           }
         }
-      });
-
-      modalInstance.result.then(function () {
-      }, function () {
-      });
+      })
+        .then(function(answer) {
+          $scope.status = 'You said the information was "' + answer + '".';
+        }, function() {
+          $scope.status = 'You cancelled the dialog.';
+        });
     };
 
     $scope.isRSVP = function (rsvp, party) {

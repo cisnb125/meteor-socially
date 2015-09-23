@@ -16,6 +16,15 @@ angularutils:pagination
 tmeasday:publish-counts
 email
 angularui:angular-google-maps
-twbs:bootstrap@3.3.5
 less
 angularui:angular-ui-bootstrap@0.13.0
+angular:angular-material
+planettraining:material-design-icons
+cfs:standard-packages
+cfs:gridfs
+danialfarid:ng-file-upload
+alexk111:ng-img-crop
+vitalets:angular-xeditable
+netanelgilad:angular-sortable-view
+urigo:angular@=0.9.2
+cfs:graphicsmagick
