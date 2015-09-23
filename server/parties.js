@@ -14,7 +14,7 @@ Meteor.publish("parties", function (options, searchString) {
         {owner: {$exists: true}}
       ]},
       {$and:[
-        {invited: this.userid},
+        {invited: this.userId},
         {invited: {$exists: true}}
       ]}
     ]}), { noReady: true });

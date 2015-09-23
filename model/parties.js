@@ -1,14 +1,13 @@
-// Will run on boh on the client and the server (mongo & minimongo)
 Parties = new Mongo.Collection("parties");
 
 Parties.allow({
-  insert: function(userId, party) {
+  insert: function (userId, party) {
     return userId && party.owner === userId;
   },
-  update: function(userId, party, fields, modifier) {
+  update: function (userId, party, fields, modifier) {
     return userId && party.owner === userId;
   },
-  remove: function(userId, party) {
+  remove: function (userId, party) {
     return userId && party.owner === userId;
   }
 });
@@ -50,14 +49,15 @@ Meteor.methods({
   rsvp: function (partyId, rsvp) {
     check(partyId, String);
     check(rsvp, String);
-    if (!this.userId)
+    if (! this.userId)
       throw new Meteor.Error(403, "You must be logged in to RSVP");
-    if (!_.contains(['yes', 'no', 'maybe'], rsvp))
+    if (! _.contains(['yes', 'no', 'maybe'], rsvp))
       throw new Meteor.Error(400, "Invalid RSVP");
     var party = Parties.findOne(partyId);
-    if (!party)
+    if (! party)
       throw new Meteor.Error(404, "No such party");
-    if (!party.public && party.owner !== this.userId && !_.contains(party.invited, this.userId))
+    if (! party.public && party.owner !== this.userId &&
+      !_.contains(party.invited, this.userId))
     // private, but let's not tell this to the user
       throw new Meteor.Error(403, "No such party");
 
